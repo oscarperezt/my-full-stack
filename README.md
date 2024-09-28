@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Full Stack FastAPI Template
 
 <a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test/badge.svg" alt="Test"></a>
@@ -9,7 +8,7 @@
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
     - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
     - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-    - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
+    - 💾 [TimescaleDB](https://www.timescale.com/) as the time series database.
 - 🚀 [React](https://react.dev) for the frontend.
     - 💃 Using TypeScript, hooks, Vite, and other parts of a modern frontend stack.
     - 🎨 [Chakra UI](https://chakra-ui.com) for the frontend components.
@@ -135,7 +134,7 @@ Before deploying it, make sure you change at least the values for:
 
 - `SECRET_KEY`
 - `FIRST_SUPERUSER_PASSWORD`
-- `POSTGRES_PASSWORD`
+- `TIMESCALEDB_PASSWORD`
 
 You can (and should) pass these as environment variables from secrets.
 
@@ -210,7 +209,7 @@ The input variables, with their default values (some auto generated) are:
 - `smtp_user`: (default: "") The SMTP server user to send emails, you can set it later in .env.
 - `smtp_password`: (default: "") The SMTP server password to send emails, you can set it later in .env.
 - `emails_from_email`: (default: `"info@example.com"`) The email account to send emails from, you can set it later in .env.
-- `postgres_password`: (default: `"changethis"`) The password for the PostgreSQL database, stored in .env, you can generate one with the method above.
+- `timescaledb_password`: (default: `"changethis"`) The password for the TimescaleDB database, stored in .env, you can generate one with the method above.
 - `sentry_dsn`: (default: "") The DSN for Sentry, if you are using it, you can set it later in .env.
 
 ## Backend Development
@@ -238,6 +237,3 @@ Check the file [release-notes.md](./release-notes.md).
 ## License
 
 The Full Stack FastAPI Template is licensed under the terms of the MIT license.
-=======
-# my-full-stack
->>>>>>> a97cd9a (first commit)

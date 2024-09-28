@@ -1,23 +1,22 @@
 services:
 
   db:
-    image: postgres:12
+    image: timescale/timescaledb-ha:pg16
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${TIMESCALE_USER} -d ${TIMESCALE_DB}"]
       interval: 10s
       retries: 5
       start_period: 30s
       timeout: 10s
     volumes:
-      - app-db-data:/var/lib/postgresql/data/pgdata
+      - app-db-data:/var/lib/postgresql/data
     env_file:
       - .env
     environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
-      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+      - POSTGRES_PASSWORD=${TIMESCALE_PASSWORD?Variable not set}
+      - POSTGRES_USER=${TIMESCALE_USER?Variable not set}
+      - POSTGRES_DB=${TIMESCALE_DB?Variable not set}
 
   adminer:
     image: adminer
@@ -69,10 +68,10 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAILS_FROM_EMAIL=${EMAILS_FROM_EMAIL}
       - POSTGRES_SERVER=db
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_PORT=${TIMESCALE_PORT}
+      - POSTGRES_DB=${TIMESCALE_DB}
+      - POSTGRES_USER=${TIMESCALE_USER?Variable not set}
+      - POSTGRES_PASSWORD=${TIMESCALE_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
 
   backend:
@@ -102,10 +101,10 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAILS_FROM_EMAIL=${EMAILS_FROM_EMAIL}
       - POSTGRES_SERVER=db
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_PORT=${TIMESCALE_PORT}
+      - POSTGRES_DB=${TIMESCALE_DB}
+      - POSTGRES_USER=${TIMESCALE_USER?Variable not set}
+      - POSTGRES_PASSWORD=${TIMESCALE_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
 
     healthcheck:
