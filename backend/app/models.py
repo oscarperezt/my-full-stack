@@ -15,6 +15,7 @@ def utcnow() -> datetime:
 # Shared properties
 class UserBase(SQLModel):
     """Base user properties"""
+
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
@@ -24,11 +25,13 @@ class UserBase(SQLModel):
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     """Properties to receive via API on user creation"""
+
     password: str = Field(min_length=8, max_length=40)
 
 
 class UserRegister(SQLModel):
     """Properties to receive via API on user registration"""
+
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     full_name: str | None = Field(default=None, max_length=255)
@@ -37,19 +40,21 @@ class UserRegister(SQLModel):
 # Properties to receive via API on update, all are optional
 class UserUpdate(UserBase):
     """Properties to receive via API on user update"""
-    email: EmailStr = Field(
-        default=None, max_length=255)
+
+    email: EmailStr = Field(default=None, max_length=255)
     password: str | None = Field(default=None, min_length=8, max_length=40)
 
 
 class UserUpdateMe(SQLModel):
     """Properties to receive via API on user update"""
+
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
 
 
 class UpdatePassword(SQLModel):
     """Properties to receive via API on password update"""
+
     current_password: str = Field(min_length=8, max_length=40)
     new_password: str = Field(min_length=8, max_length=40)
 
@@ -57,20 +62,22 @@ class UpdatePassword(SQLModel):
 # Database model, database table inferred from class name
 class User(UserBase, table=True):
     """Database model for users"""
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(
-        back_populates="owner", cascade_delete=True)
+    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
 class UserPublic(UserBase):
     """Properties to return via API"""
+
     id: uuid.UUID
 
 
 class UsersPublic(SQLModel):
     """Properties to return via API"""
+
     data: list[UserPublic]
     count: int
 
@@ -78,6 +85,7 @@ class UsersPublic(SQLModel):
 # Shared properties
 class ItemBase(SQLModel):
     """Base item properties"""
+
     title: str = Field(min_length=1, max_length=255)
     description: str | None = Field(default=None, max_length=255)
 
@@ -85,19 +93,21 @@ class ItemBase(SQLModel):
 # Properties to receive on item creation
 class ItemCreate(ItemBase):
     """Properties to receive on item creation"""
+
     pass
 
 
 # Properties to receive on item update
 class ItemUpdate(ItemBase):
     """Properties to receive on item update"""
-    title: str = Field(
-        default=None, min_length=1, max_length=255)
+
+    title: str = Field(default=None, min_length=1, max_length=255)
 
 
 # Database model, database table inferred from class name
 class Item(ItemBase, table=True):
     """Database model for items"""
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     title: str = Field(max_length=255)
     owner_id: uuid.UUID = Field(
@@ -109,12 +119,14 @@ class Item(ItemBase, table=True):
 # Properties to return via API, id is always required
 class ItemPublic(ItemBase):
     """Properties to return via API"""
+
     id: uuid.UUID
     owner_id: uuid.UUID
 
 
 class ItemsPublic(SQLModel):
     """Properties to return via API"""
+
     data: list[ItemPublic]
     count: int
 
@@ -122,12 +134,14 @@ class ItemsPublic(SQLModel):
 # Generic message
 class Message(SQLModel):
     """Generic message"""
+
     message: str
 
 
 # JSON payload containing access token
 class Token(SQLModel):
     """JSON payload containing access token"""
+
     access_token: str
     token_type: str = "bearer"
 
@@ -135,17 +149,20 @@ class Token(SQLModel):
 # Contents of JWT token
 class TokenPayload(SQLModel):
     """Contents of JWT token"""
+
     sub: str | None = None
 
 
 class NewPassword(SQLModel):
     """New password"""
+
     token: str
     new_password: str = Field(min_length=8, max_length=40)
 
 
 class TelemetryData(SQLModel, table=True):
     """Database model for telemetry data"""
+
     id: int = Field(default=None, primary_key=True)
     storage_server_timestamp_utc: datetime = Field(default_factory=utcnow)
     ident: str = Field(default="unknown_device")
@@ -160,33 +177,31 @@ class TelemetryData(SQLModel, table=True):
     channel_id: int | None = None
     protocol_id: int | None = None
     engine_ignition_status: bool | None = None
-    device_id: str | None = Field(
-        None, description="Unique identifier of the device")
-    device_name: str | None = Field(
-        None, description="Name assigned to the device")
-    din: int | None = Field(
-        None, description="Digital input status")
-    event_enum: int | None = Field(
-        None, description="Event code in enumerated form")
-    event_seqnum: int | None = Field(
-        None, description="Event sequence number")
-    gnss_antenna_status: str | None = Field(
-        None, description="GNSS antenna status")
+    device_id: str | None = Field(None, description="Unique identifier of the device")
+    device_name: str | None = Field(None, description="Name assigned to the device")
+    din: int | None = Field(None, description="Digital input status")
+    event_enum: int | None = Field(None, description="Event code in enumerated form")
+    event_seqnum: int | None = Field(None, description="Event sequence number")
+    gnss_antenna_status: str | None = Field(None, description="GNSS antenna status")
     gsm_network_roaming_status: str | None = Field(
-        None, description="GSM network roaming status")
+        None, description="GSM network roaming status"
+    )
     message_type_enum: int | None = Field(
-        None, description="Message type in enumerated form")
+        None, description="Message type in enumerated form"
+    )
     peer: str | None = Field(
-        None,
-        description="Network peer information (e.g., IP address and port)")
+        None, description="Network peer information (e.g., IP address and port)"
+    )
     position_direction: float | None = Field(
-        None, description="Direction or heading of the device")
-    position_speed: float | None = Field(
-        None, description="Speed of the device")
+        None, description="Direction or heading of the device"
+    )
+    position_speed: float | None = Field(None, description="Speed of the device")
     position_valid: bool | None = Field(
-        None, description="Boolean indicating if position data is valid")
+        None, description="Boolean indicating if position data is valid"
+    )
     timestamp_key: int | None = Field(
-        None, description="Timestamp key for indexing or reference")
+        None, description="Timestamp key for indexing or reference"
+    )
     accumulator_0: float | None = None
     accumulator_1: float | None = None
     accumulator_2: float | None = None
