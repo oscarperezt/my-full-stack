@@ -50,22 +50,22 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
-    POSTGRES_SERVER: str
-    POSTGRES_PORT: int = 5488
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+    TIMESCALE_SERVER: str
+    TIMESCALE_PORT: int = 5488
+    TIMESCALE_USER: str
+    TIMESCALE_PASSWORD: str = ""
+    TIMESCALE_DB: str = ""
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
         return MultiHostUrl.build(
             scheme="postgresql+psycopg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
-            host=self.POSTGRES_SERVER,
-            port=self.POSTGRES_PORT,
-            path=self.POSTGRES_DB,
+            username=self.TIMESCALE_USER,
+            password=self.TIMESCALE_PASSWORD,
+            host=self.TIMESCALE_SERVER,
+            port=self.TIMESCALE_PORT,
+            path=self.TIMESCALE_DB,
         )
 
     SMTP_TLS: bool = True
@@ -111,7 +111,7 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret("POSTGRES_PASSWORD", self.POSTGRES_PASSWORD)
+        self._check_default_secret("TIMESCALE_PASSWORD", self.TIMESCALE_PASSWORD)
         self._check_default_secret(
             "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
         )
