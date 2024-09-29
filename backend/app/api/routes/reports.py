@@ -1,22 +1,26 @@
-from fastapi import APIRouter, HTTPException, Request, Query
-from sqlmodel import Session, select
-from app.models import TelemetryData
-from datetime import datetime, timezone as tz
-from sqlalchemy import exc
-from typing import Optional, Dict, Any
-from app.core.db import engine
+from datetime import datetime
+from datetime import timezone as tz
+from typing import Any
 
+from fastapi import APIRouter, HTTPException, Query, Request
+from sqlalchemy import exc
+from sqlmodel import Session, select
+
+from app.core.db import engine
+from app.models import TelemetryData
 
 router = APIRouter()
 
 
-def convert_timestamp(timestamp: Optional[float]) -> Optional[datetime]:
+def convert_timestamp(timestamp: float | None) -> datetime | None:
+    """Convert a Unix timestamp to a datetime object"""
     if timestamp is not None:
         return datetime.fromtimestamp(timestamp, tz.utc)
     return None
 
 
-def validate_report(report: Dict[str, Any]) -> None:
+def validate_report(report: dict[str, Any]) -> None:
+    """Validate a report dictionary"""
     required_fields = ['timestamp', 'server.timestamp', 'device.id']
     missing_fields = [
         field for field in required_fields if not report.get(field)]
@@ -27,6 +31,7 @@ def validate_report(report: Dict[str, Any]) -> None:
 
 @router.post("/reports/")
 async def receive_report(request: Request) -> dict[str, str]:
+    """Receive a report from a streaming telemetry source"""
     try:
         reports: list[dict[str, Any]] = await request.json()
         # Ensure reports is a list
@@ -89,9 +94,9 @@ async def receive_report(request: Request) -> dict[str, str]:
                 "message": f"{len(reports)} reports processed"}
     except exc.SQLAlchemyError as e:
         raise HTTPException(
-            status_code=500, detail=f"Database error: {str(e)}")
+            status_code=500, detail=f"Database error: {str(e)}") from e
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.get("/reports/")
@@ -100,19 +105,20 @@ async def get_telemetry_data(
         default=10, description="Limit the number of records returned"),
     offset: int = Query(
         default=0, description="Offset for pagination"),
-    ident: Optional[str] = Query(
+    ident: str | None = Query(
         None, description="Filter by device identifier (ident)"),
-    position_latitude: Optional[float] = Query(
+    position_latitude: float | None = Query(
         None, description="Filter by position latitude"),
-    position_longitude: Optional[float] = Query(
+    position_longitude: float | None = Query(
         None, description="Filter by position longitude"),
-    engine_ignition_status: Optional[bool] = Query(
+    engine_ignition_status: bool | None = Query(
         None, description="Filter by engine ignition status"),
-    timestamp_from: Optional[datetime] = Query(
+    timestamp_from: datetime | None = Query(
         None, description="Filter by timestamp from"),
-    timestamp_to: Optional[datetime] = Query(
+    timestamp_to: datetime | None = Query(
         None, description="Filter by timestamp to")
 ) -> list[TelemetryData]:
+    """Retrieve telemetry data from the database"""
     try:
         with Session(engine) as session:
             # Start building the query
@@ -145,4 +151,4 @@ async def get_telemetry_data(
             return list(results)
     except exc.SQLAlchemyError as e:
         raise HTTPException(
-            status_code=500, detail=f"Database error: {str(e)}")
+            status_code=500, detail=f"Database error: {str(e)}") from e
