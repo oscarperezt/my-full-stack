@@ -2,13 +2,13 @@ import uuid
 
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Column, JSON, Relationship
-from sqlmodel import Field  # type: ignore
+from sqlmodel import Field
 from typing import Any, Optional
 from datetime import datetime
 from datetime import timezone as tz
 
 
-def utcnow():
+def utcnow() -> datetime:
     return datetime.now(tz.utc)
 
 
@@ -34,7 +34,7 @@ class UserRegister(SQLModel):
 # Properties to receive via API on update, all are optional
 class UserUpdate(UserBase):
     email: EmailStr = Field(
-        default=None, max_length=255)  # type: ignore
+        default=None, max_length=255)
     password: str | None = Field(default=None, min_length=8, max_length=40)
 
 

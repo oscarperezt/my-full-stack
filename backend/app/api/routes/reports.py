@@ -16,7 +16,7 @@ def convert_timestamp(timestamp: Optional[float]) -> Optional[datetime]:
     return None
 
 
-def validate_report(report: Dict[str, Any]):
+def validate_report(report: Dict[str, Any]) -> None:
     required_fields = ['timestamp', 'server.timestamp', 'device.id']
     missing_fields = [
         field for field in required_fields if not report.get(field)]
@@ -26,7 +26,7 @@ def validate_report(report: Dict[str, Any]):
 
 
 @router.post("/reports/")
-async def receive_report(request: Request):
+async def receive_report(request: Request) -> dict[str, str]:
     try:
         reports: list[dict[str, Any]] = await request.json()
         # Ensure reports is a list
@@ -112,7 +112,7 @@ async def get_telemetry_data(
         None, description="Filter by timestamp from"),
     timestamp_to: Optional[datetime] = Query(
         None, description="Filter by timestamp to")
-):
+) -> list[TelemetryData]:
     try:
         with Session(engine) as session:
             # Start building the query
@@ -142,7 +142,7 @@ async def get_telemetry_data(
 
             # Execute the query and fetch results
             results = session.exec(query).all()
-            return results
+            return list(results)
     except exc.SQLAlchemyError as e:
         raise HTTPException(
             status_code=500, detail=f"Database error: {str(e)}")
