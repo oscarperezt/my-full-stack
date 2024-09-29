@@ -57,7 +57,7 @@ test("User can reset password successfully using the link", async ({
   let url = await page.getAttribute(selector, "href")
 
   // TODO: update var instead of doing a replace
-  url = url!.replace("http://localhost/", "http://localhost:5173/")
+  url = url!.replace("http://localhost/", "http://localhost:5188/")
 
   // Set the new password and confirm it
   await page.goto(url)
@@ -107,7 +107,7 @@ test("Weak new password validation", async ({ page, request }) => {
 
   const selector = 'a[href*="/reset-password?token="]'
   let url = await page.getAttribute(selector, "href")
-  url = url!.replace("http://localhost/", "http://localhost:5173/")
+  url = url!.replace("http://localhost/", "http://localhost:5188/")
 
   // Set a weak new password
   await page.goto(url)
