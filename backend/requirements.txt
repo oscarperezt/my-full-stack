@@ -6,3 +6,8 @@ tenacity
 alembic
 sentry-sdk
 pre-commit
+passlib
+pydantic
+pydantic-settings
+email-validator
+psycopg
