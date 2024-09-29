@@ -5,3 +5,4 @@ psycopg2-binary
 tenacity
 alembic
 sentry-sdk
+pre-commit
