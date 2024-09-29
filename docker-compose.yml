@@ -4,7 +4,7 @@ services:
     image: timescale/timescaledb-ha:pg16
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${TIMESCALE_USER} -d ${TIMESCALE_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${TIMESCALE_USER} -d ${TIMESCALE_DB} -p ${TIMESCALE_PORT}"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -17,6 +17,7 @@ services:
       - POSTGRES_PASSWORD=${TIMESCALE_PASSWORD?Variable not set}
       - POSTGRES_USER=${TIMESCALE_USER?Variable not set}
       - POSTGRES_DB=${TIMESCALE_DB?Variable not set}
+    command: postgres -c "port=${TIMESCALE_PORT}"
 
   adminer:
     image: adminer
