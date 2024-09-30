@@ -50,7 +50,7 @@ services:
   frontend:
     restart: "no"
     ports:
-      - "5188:80"
+      - "5888:80"
     build:
       context: ./frontend
       args:

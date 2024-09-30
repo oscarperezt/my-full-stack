@@ -20,8 +20,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Debug Frontend: Launch Chrome against http://localhost:5188",
-            "url": "http://localhost:5188",
+            "name": "Debug Frontend: Launch Chrome against http://localhost:5888",
+            "url": "http://localhost:5888",
             "webRoot": "${workspaceFolder}/frontend"
         },
     ]
