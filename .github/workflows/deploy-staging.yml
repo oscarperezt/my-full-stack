@@ -28,5 +28,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Debug - Print Secrets
+        run: |
+          echo "ENVIRONMENT=$ENVIRONMENT"
+          echo "DOMAIN=$DOMAIN"
+          echo "STACK_NAME=$STACK_NAME"
+          echo "EMAILS_FROM_EMAIL=$EMAILS_FROM_EMAIL"
+          echo "SENTRY_DSN=$SENTRY_DSN"
+          # Note: Do NOT print sensitive information like passwords or secret keys
+
       - run: docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} build
       - run: docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} up -d
