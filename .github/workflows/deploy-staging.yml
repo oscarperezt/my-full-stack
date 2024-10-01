@@ -25,6 +25,7 @@ jobs:
       EMAILS_FROM_EMAIL: ${{ secrets.EMAILS_FROM_EMAIL }}
       TIMESCALE_PASSWORD: ${{ secrets.TIMESCALE_PASSWORD }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      FRONTEND_HOST: ${{ secrets.FRONTEND_HOST }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
