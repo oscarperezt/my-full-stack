@@ -26,6 +26,13 @@ jobs:
       TIMESCALE_PASSWORD: ${{ secrets.TIMESCALE_PASSWORD }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       FRONTEND_HOST: ${{ secrets.FRONTEND_HOST }}
+      BACKEND_CORS_ORIGINS: ${{ secrets.BACKEND_CORS_ORIGINS }}
+      TIMESCALE_SERVER: ${{ secrets.TIMESCALE_SERVER }}
+      TIMESCALE_PORT: ${{ secrets.TIMESCALE_PORT }}
+      TIMESCALE_DB: ${{ secrets.TIMESCALE_DB }}
+      TIMESCALE_USER: ${{ secrets.TIMESCALE_USER }}
+      TIMESCALE_PASSWORD: ${{ secrets.TIMESCALE_PASSWORD }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
