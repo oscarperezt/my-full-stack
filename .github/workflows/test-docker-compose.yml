@@ -14,6 +14,8 @@ jobs:
   test-docker-compose:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Create .env file from GitHub Secrets
         run: |
           echo "DOMAIN=localhost" > .env
@@ -37,8 +39,6 @@ jobs:
           echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
           echo "DOCKER_IMAGE_BACKEND=${{ secrets.DOCKER_IMAGE_BACKEND }}" >> .env
           echo "DOCKER_IMAGE_FRONTEND=${{ secrets.DOCKER_IMAGE_FRONTEND }}" >> .env
-      - name: Checkout
-        uses: actions/checkout@v4
       - run: docker compose build
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d --wait
