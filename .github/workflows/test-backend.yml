@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "DOMAIN=localhost" > .env
           echo "BACKEND_CORS_ORIGINS=${{ secrets.BACKEND_CORS_ORIGINS }}" >> .env
-          echo "FRONTEND_HOST=${{ secrets.FRONTEND_HOST }} >> .env
+          echo "FRONTEND_HOST=${{ secrets.FRONTEND_HOST }}" >> .env
           echo "ENVIRONMENT=local" >> .env
           echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" >> .env
           echo "STACK_NAME=${{ secrets.STACK_NAME_STAGING }}" >> .env
