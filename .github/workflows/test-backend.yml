@@ -29,26 +29,26 @@ jobs:
       - name: Create .env file from GitHub Secrets
         run: |
           echo "DOMAIN=localhost" > .env
-          echo "BACKEND_CORS_ORIGINS=${{ secrets.BACKEND_CORS_ORIGINS }}" " >> .env
-          echo "FRONTEND_HOST=${{ secrets.FRONTEND_HOST }}" " >> .env
-          echo "ENVIRONMENT=local" " >> .env
-          echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" " >> .env
-          echo "STACK_NAME=${{ secrets.STACK_NAME_STAGING }}" " >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" " >> .env
-          echo "FIRST_SUPERUSER=${{ secrets.FIRST_SUPERUSER }}" " >> .env
-          echo "FIRST_SUPERUSER_PASSWORD=${{ secrets.FIRST_SUPERUSER_PASSWORD }}" " >> .env
-          echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" " >> .env
-          echo "SMTP_USER=${{ secrets.SMTP_USER }}" " >> .env
-          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" " >> .env
-          echo "EMAILS_FROM_EMAIL=${{ secrets.EMAILS_FROM_EMAIL }}" " >> .env
-          echo "TIMESCALE_SERVER=${{ secrets.TIMESCALE_SERVER }}" " >> .env
-          echo "TIMESCALE_PORT=${{ secrets.TIMESCALE_PORT }}" " >> .env
-          echo "TIMESCALE_DB=${{ secrets.TIMESCALE_DB }}" " >> .env
-          echo "TIMESCALE_USER=${{ secrets.TIMESCALE_USER }}" " >> .env
-          echo "TIMESCALE_PASSWORD=${{ secrets.TIMESCALE_PASSWORD }}" " >> .env
-          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" " >> .env
-          echo "DOCKER_IMAGE_BACKEND=${{ secrets.DOCKER_IMAGE_BACKEND }}" " >> .env
-          echo "DOCKER_IMAGE_FRONTEND=${{ secrets.DOCKER_IMAGE_FRONTEND }}" " >> .env
+          echo "BACKEND_CORS_ORIGINS=${{ secrets.BACKEND_CORS_ORIGINS }}" >> .env
+          echo "FRONTEND_HOST=${{ secrets.FRONTEND_HOST }} >> .env
+          echo "ENVIRONMENT=local" >> .env
+          echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" >> .env
+          echo "STACK_NAME=${{ secrets.STACK_NAME_STAGING }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "FIRST_SUPERUSER=${{ secrets.FIRST_SUPERUSER }}" >> .env
+          echo "FIRST_SUPERUSER_PASSWORD=${{ secrets.FIRST_SUPERUSER_PASSWORD }}" >> .env
+          echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
+          echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> .env
+          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
+          echo "EMAILS_FROM_EMAIL=${{ secrets.EMAILS_FROM_EMAIL }}" >> .env
+          echo "TIMESCALE_SERVER=${{ secrets.TIMESCALE_SERVER }}" >> .env
+          echo "TIMESCALE_PORT=${{ secrets.TIMESCALE_PORT }}" >> .env
+          echo "TIMESCALE_DB=${{ secrets.TIMESCALE_DB }}" >> .env
+          echo "TIMESCALE_USER=${{ secrets.TIMESCALE_USER }}" >> .env
+          echo "TIMESCALE_PASSWORD=${{ secrets.TIMESCALE_PASSWORD }}" >> .env
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
+          echo "DOCKER_IMAGE_BACKEND=${{ secrets.DOCKER_IMAGE_BACKEND }}" >> .env
+          echo "DOCKER_IMAGE_FRONTEND=${{ secrets.DOCKER_IMAGE_FRONTEND }}" >> .env
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d db mailcatcher
       - name: Migrate DB
