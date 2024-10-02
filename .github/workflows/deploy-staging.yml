@@ -69,6 +69,6 @@ jobs:
           else
             echo "No containers to remove.";
           fi
-      - run: docker compose down -v --remove-orphans
+      - run: docker compose down
       - run: docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} build
       - run: docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} up -d
