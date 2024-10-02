@@ -31,7 +31,12 @@ def validate_report(report: dict[str, Any]) -> None:
 async def receive_report(request: Request) -> dict[str, str]:
     """Receive a report from a streaming telemetry source"""
     try:
-        reports: list[dict[str, Any]] = await request.json()
+        reports_json = await request.json()
+        # Ensure reports is a list
+        if isinstance(reports_json, dict):
+            reports: list[dict[str, Any]] = [reports_json]
+        else:
+            reports = reports_json
         # Ensure reports is a list
 
         with Session(engine) as session:
