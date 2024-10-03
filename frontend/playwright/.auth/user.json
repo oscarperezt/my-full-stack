@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:5888",
+      "localStorage": [
+        {
+          "name": "access_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mjg2Mjc5MjUsInN1YiI6IjQ2ZTZlNzNiLTU0MTQtNGY3My04OWY2LTU0Yjg3ZTNmZTM2YyJ9.ZJSwjmc1u1brWesVZvGMWJL_utnmWxx7Se_l3XacSyw"
+        },
+        {
+          "name": "chakra-ui-color-mode",
+          "value": "light"
+        }
+      ]
+    }
+  ]
+}
