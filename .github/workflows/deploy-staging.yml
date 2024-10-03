@@ -59,4 +59,4 @@ jobs:
           echo "DOCKER_IMAGE_FRONTEND=${{ secrets.DOCKER_IMAGE_FRONTEND }}" >> .env
       - name: Deploy Services
         run: |
-          docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} up -d --build
+          docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} up -d --build --force-recreate --remove-orphans

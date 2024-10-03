@@ -60,8 +60,6 @@ services:
       - POSTGRES_USER=${TIMESCALE_USER?Variable not set}
       - POSTGRES_PASSWORD=${TIMESCALE_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
-    ports:
-      - "8800:8000"
 
   backend:
     image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
