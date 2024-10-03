@@ -40,25 +40,27 @@ jobs:
       run: npx playwright install --with-deps
       working-directory: frontend
     - name: Modify /etc/hosts
-      run: echo "127.0.0.1 mailcather" | sudo tee -a /etc/hosts
+      run: |
+        echo "127.0.0.1 mailcather" | sudo tee -a /etc/hosts
+        echo "127.0.0.1 frontend" | sudo tee -a /etc/hosts
     - name: Create .env file from GitHub Secrets
       run: |
         echo "DOMAIN=localhost" > .env
         echo "BACKEND_CORS_ORIGINS=${{ secrets.BACKEND_CORS_ORIGINS }}" >> .env
-        echo "FRONTEND_HOST=${{ secrets.FRONTEND_HOST }}" >> .env
-        echo "ENVIRONMENT=${{ secrets.ENVIRONMENT }}" >> .env
+        echo "FRONTEND_HOST=http://localhost:5888" >> .env
+        echo "ENVIRONMENT=local" >> .env
         echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" >> .env
         echo "STACK_NAME=${{ secrets.STACK_NAME_STAGING }}" >> .env
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-        echo "FIRST_SUPERUSER=${{ secrets.FIRST_SUPERUSER }}" >> .env
-        echo "FIRST_SUPERUSER_PASSWORD=${{ secrets.FIRST_SUPERUSER_PASSWORD }}" >> .env
-        echo "SMTP_HOST=mailcatcher" >> .env
+        echo "SECRET_KEY=chagethis" >> .env
+        echo "FIRST_SUPERUSER=admin@example.com" >> .env
+        echo "FIRST_SUPERUSER_PASSWORD=changethis" >> .env
+        echo "SMTP_HOST=" >> .env
         echo "SMTP_USER=" >> .env
         echo "SMTP_PASSWORD=" >> .env
-        echo "EMAILS_FROM_EMAIL=noreply@example.com" >> .env
-        echo "SMTP_TLS=False" >> .env
+        echo "EMAILS_FROM_EMAIL=info@example.com" >> .env
+        echo "SMTP_TLS=True" >> .env
         echo "SMTP_SSL=False" >> .env
-        echo "SMTP_PORT=1025" >> .env
+        echo "SMTP_PORT=587" >> .env
         echo "TIMESCALE_SERVER=${{ secrets.TIMESCALE_SERVER }}" >> .env
         echo "TIMESCALE_PORT=${{ secrets.TIMESCALE_PORT }}" >> .env
         echo "TIMESCALE_DB=${{ secrets.TIMESCALE_DB }}" >> .env
