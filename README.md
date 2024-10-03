@@ -229,6 +229,8 @@ General development docs: [development.md](./development.md).
 
 This includes using Docker Compose, custom local domains, `.env` configurations, etc.
 
+Note: `.env` files have been removed for security reasons. It is necessary to set up GitHub secrets.
+
 ## Release Notes
 
 Check the file [release-notes.md](./release-notes.md).
