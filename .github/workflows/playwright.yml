@@ -39,6 +39,8 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
       working-directory: frontend
+    - name: Modify /etc/hosts
+      run: echo "127.0.0.1 mailcather" | sudo tee -a /etc/hosts
     - name: Create .env file from GitHub Secrets
       run: |
         echo "DOMAIN=localhost" > .env
@@ -50,7 +52,7 @@ jobs:
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
         echo "FIRST_SUPERUSER=${{ secrets.FIRST_SUPERUSER }}" >> .env
         echo "FIRST_SUPERUSER_PASSWORD=${{ secrets.FIRST_SUPERUSER_PASSWORD }}" >> .env
-        echo "SMTP_HOST=" >> .env
+        echo "SMTP_HOST=mailcatcher" >> .env
         echo "SMTP_USER=" >> .env
         echo "SMTP_PASSWORD=" >> .env
         echo "EMAILS_FROM_EMAIL=noreply@example.com" >> .env
