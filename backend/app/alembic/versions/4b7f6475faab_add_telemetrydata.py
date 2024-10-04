@@ -74,9 +74,9 @@ def upgrade():
     """)
 
     # Add indexes on frequently queried columns
-    op.create_index('ix_telemetrydata_ident', 'telemetrydata', ['ident'])
-    op.create_index('ix_telemetrydata_device_id', 'telemetrydata', ['device_id'])
-    op.create_index('ix_telemetrydata_timestamp', 'telemetrydata', ['timestamp'])
+    op.create_index('ix_telemetrydata_ident', 'telemetrydata', ['ident', 'timestamp'])
+    op.create_index('ix_telemetrydata_device_id', 'telemetrydata', ['device_id', 'timestamp'])
+
 
     # Enable compression on the hypertable with segment by device_id, order by timestamp
     op.execute("""
