@@ -3,6 +3,7 @@ This module defines API routes for handling telemetry reports.
 It includes endpoints for receiving and storing telemetry reports and
 retrieving telemetry data from the database.
 """
+
 from datetime import datetime
 from datetime import timezone as tz
 from typing import Any
