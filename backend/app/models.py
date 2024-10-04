@@ -4,6 +4,7 @@ from datetime import timezone as tz
 from typing import Any
 
 from pydantic import EmailStr
+from sqlalchemy import Integer, PrimaryKeyConstraint
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
 
@@ -163,7 +164,7 @@ class NewPassword(SQLModel):
 class TelemetryData(SQLModel, table=True):
     """Database model for telemetry data"""
 
-    id: int = Field(default=None, primary_key=True)
+    id: int = Field(default=None, sa_column=Column(Integer, autoincrement=True))
     storage_server_timestamp_utc: datetime = Field(default_factory=utcnow)
     ident: str = Field(default="unknown_device")
     position_altitude: float | None = None
@@ -172,7 +173,7 @@ class TelemetryData(SQLModel, table=True):
     position_longitude: float | None = None
     position_satellites: int | None = None
     server_timestamp: datetime | None = Field(default=None, nullable=True)
-    timestamp: datetime | None = Field(default=None, nullable=True)
+    timestamp: datetime | None = Field(default=None, nullable=False)
     device_type_id: int | None = None
     channel_id: int | None = None
     protocol_id: int | None = None
@@ -219,3 +220,5 @@ class TelemetryData(SQLModel, table=True):
     accumulator_14: float | None = None
     accumulator_15: float | None = None
     raw_data: dict[str, Any] | None = Field(sa_column=Column(JSON))
+
+    __table_args__ = (PrimaryKeyConstraint("id", "timestamp"),)
