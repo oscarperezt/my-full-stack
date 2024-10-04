@@ -1,3 +1,8 @@
+"""
+This module defines API routes for handling telemetry reports.
+It includes endpoints for receiving and storing telemetry reports and
+retrieving telemetry data from the database.
+"""
 from datetime import datetime
 from datetime import timezone as tz
 from typing import Any
@@ -37,7 +42,8 @@ async def receive_report(request: Request) -> dict[str, str]:
             reports: list[dict[str, Any]] = [reports_json]
         else:
             reports = reports_json
-        # Ensure reports is a list
+
+        telemetry_data_list: list[TelemetryData] = []
 
         with Session(engine) as session:
             for report in reports:
@@ -87,8 +93,12 @@ async def receive_report(request: Request) -> dict[str, str]:
                     accumulator_15=report.get("accumulator.15"),
                     raw_data=report,
                 )
-                session.add(telemetry_data)
+                telemetry_data_list.append(telemetry_data)
+
+        with Session(engine) as session:
+            session.bulk_save_objects(telemetry_data_list)
             session.commit()
+
         return {"status": "success", "message": f"{len(reports)} reports processed"}
     except exc.SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}") from e
