@@ -4,7 +4,7 @@ from datetime import timezone as tz
 from typing import Any
 
 from pydantic import EmailStr
-from sqlalchemy import PrimaryKeyConstraint
+from sqlalchemy import Integer, PrimaryKeyConstraint
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
 
@@ -164,7 +164,7 @@ class NewPassword(SQLModel):
 class TelemetryData(SQLModel, table=True):
     """Database model for telemetry data"""
 
-    id: int = Field(default=None)
+    id: int = Field(default=None, sa_column=Column(Integer, autoincrement=True))
     storage_server_timestamp_utc: datetime = Field(default_factory=utcnow)
     ident: str = Field(default="unknown_device")
     position_altitude: float | None = None
