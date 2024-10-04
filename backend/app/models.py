@@ -172,7 +172,7 @@ class TelemetryData(SQLModel, table=True):
     position_longitude: float | None = None
     position_satellites: int | None = None
     server_timestamp: datetime | None = Field(default=None, nullable=True)
-    timestamp: datetime | None = Field(default=None, nullable=True)
+    timestamp: datetime | None = Field(default=None, nullable=False)
     device_type_id: int | None = None
     channel_id: int | None = None
     protocol_id: int | None = None

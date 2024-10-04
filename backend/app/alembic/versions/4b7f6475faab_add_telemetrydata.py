@@ -29,7 +29,7 @@ def upgrade():
     sa.Column('position_longitude', sa.Float(), nullable=True),
     sa.Column('position_satellites', sa.Integer(), nullable=True),
     sa.Column('server_timestamp', sa.DateTime(), nullable=True),
-    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
     sa.Column('device_type_id', sa.Integer(), nullable=True),
     sa.Column('channel_id', sa.Integer(), nullable=True),
     sa.Column('protocol_id', sa.Integer(), nullable=True),
