@@ -64,6 +64,7 @@ def upgrade():
     sa.Column('accumulator_14', sa.Float(), nullable=True),
     sa.Column('accumulator_15', sa.Float(), nullable=True),
     sa.Column('raw_data', sa.JSON(), nullable=True),
+    sa.PrimaryKeyConstraint('id', 'timestamp'),
     )
     # ### end Alembic commands ###
 

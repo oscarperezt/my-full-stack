@@ -4,6 +4,7 @@ from datetime import timezone as tz
 from typing import Any
 
 from pydantic import EmailStr
+from sqlalchemy import PrimaryKeyConstraint
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
 
@@ -219,3 +220,5 @@ class TelemetryData(SQLModel, table=True):
     accumulator_14: float | None = None
     accumulator_15: float | None = None
     raw_data: dict[str, Any] | None = Field(sa_column=Column(JSON))
+
+    __table_args__ = (PrimaryKeyConstraint("id", "timestamp"),)
