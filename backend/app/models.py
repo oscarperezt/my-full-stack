@@ -163,7 +163,7 @@ class NewPassword(SQLModel):
 class TelemetryData(SQLModel, table=True):
     """Database model for telemetry data"""
 
-    id: int = Field(default=None, primary_key=True)
+    id: int = Field(default=None)
     storage_server_timestamp_utc: datetime = Field(default_factory=utcnow)
     ident: str = Field(default="unknown_device")
     position_altitude: float | None = None
