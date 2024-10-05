@@ -35,31 +35,37 @@ def upgrade():
         ALTER TABLE telemetrydata SET (timescaledb.compress = FALSE);
     """)
 
+    # Delete all records from the telemetrydata table
+    op.execute("DELETE FROM telemetrydata;")
+
     # Proceed with schema changes
     op.create_table('device',
-    sa.Column('description', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=True),
-    sa.Column('id', sa.Uuid(), nullable=False),
-    sa.Column('provider_device_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('device_name', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False),
-    sa.Column('last_reported_latitude', sa.Float(), nullable=True),
-    sa.Column('last_reported_longitude', sa.Float(), nullable=True),
-    sa.Column('is_online', sa.Boolean(), nullable=False),
-    sa.Column('last_online_timestamp', sa.DateTime(), nullable=True),
-    sa.Column('owner_id', sa.Uuid(), nullable=False),
-    sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+        sa.Column('description', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=True),
+        sa.Column('id', sa.Uuid(), nullable=False),
+        sa.Column('provider_device_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column('device_name', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False),
+        sa.Column('last_reported_latitude', sa.Float(), nullable=True),
+        sa.Column('last_reported_longitude', sa.Float(), nullable=True),
+        sa.Column('is_online', sa.Boolean(), nullable=False),
+        sa.Column('last_online_timestamp', sa.DateTime(), nullable=True),
+        sa.Column('owner_id', sa.Uuid(), nullable=False),
+        sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ondelete='CASCADE'),
+        sa.PrimaryKeyConstraint('id')
     )
 
     # Rename the existing `device_id` column to `provider_device_id`
     op.alter_column('telemetrydata', 'device_id',
                     new_column_name='provider_device_id')
 
-    # Add a new `device_id` column with UUID type
+    # Add a new `device_id` column as non-nullable
     op.add_column('telemetrydata', sa.Column('device_id', sa.Uuid(), nullable=False))
 
+    # Drop unnecessary indexes
     op.drop_index('ix_telemetrydata_device_id', table_name='telemetrydata')
     op.drop_index('ix_telemetrydata_ident', table_name='telemetrydata')
     op.drop_index('telemetrydata_timestamp_idx', table_name='telemetrydata')
+
+    # Create a foreign key after adding the `device_id` column
     op.create_foreign_key(None, 'telemetrydata', 'device', ['device_id'], ['id'])
 
     # Re-enable compression after schema changes
