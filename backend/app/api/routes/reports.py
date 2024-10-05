@@ -12,8 +12,9 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from sqlalchemy import exc
 from sqlmodel import Session, select
 
+from app.core.config import settings
 from app.core.db import engine
-from app.models import TelemetryData
+from app.models import Device, TelemetryData, User
 
 router = APIRouter()
 
@@ -49,6 +50,49 @@ async def receive_report(request: Request) -> dict[str, str]:
         with Session(engine) as session:
             for report in reports:
                 validate_report(report)
+
+                # Fetch the device using the provider_device_id from the report
+                provider_device_id = report.get("device.id")
+                device_result = session.exec(
+                    select(Device)
+                    .where(Device.provider_device_id == provider_device_id)
+                    .limit(1)
+                )
+                device: Device | None = device_result.first()
+
+                if device is None:
+                    user = session.exec(
+                        select(User).where(User.email == settings.FIRST_SUPERUSER)
+                    ).first()
+
+                    if user is None:
+                        raise ValueError("Superuser not found")
+
+                    # CREATE A NEW DEVICE
+                    device = Device(
+                        provider_device_id=provider_device_id,
+                        device_name=report.get("device.name", ""),
+                        last_online_timestamp=convert_timestamp(
+                            report.get("timestamp")
+                        ),
+                        owner_id=user.id,
+                        last_reported_latitude=report.get("position.latitude"),
+                        last_reported_longitude=report.get("position.longitude"),
+                    )
+                    session.add(device)
+                    session.commit()
+                    session.refresh(device)
+
+                else:
+                    # UPDATE EXISTING DEVICE
+                    device.last_online_timestamp = convert_timestamp(
+                        report.get("timestamp")
+                    )
+                    device.last_reported_latitude = report.get("position.latitude")
+                    device.last_reported_longitude = report.get("position.longitude")
+                    session.add(device)
+                    session.commit()
+
                 telemetry_data = TelemetryData(
                     storage_server_timestamp_utc=datetime.now(tz.utc),
                     ident=str(report.get("ident", "unknown_device")),
@@ -63,7 +107,7 @@ async def receive_report(request: Request) -> dict[str, str]:
                     channel_id=report.get("channel.id"),
                     protocol_id=report.get("protocol.id"),
                     engine_ignition_status=report.get("engine.ignition.status", False),
-                    device_id=report.get("device.id"),
+                    provider_device_id=report.get("device.id"),
                     device_name=report.get("device.name"),
                     din=report.get("din"),
                     event_enum=report.get("event.enum"),
@@ -93,6 +137,7 @@ async def receive_report(request: Request) -> dict[str, str]:
                     accumulator_14=report.get("accumulator.14"),
                     accumulator_15=report.get("accumulator.15"),
                     raw_data=report,
+                    device_id=device.id,
                 )
                 telemetry_data_list.append(telemetry_data)
 

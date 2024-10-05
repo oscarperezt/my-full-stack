@@ -1,3 +1,7 @@
+"""
+Data models for the application
+"""
+
 import uuid
 from datetime import datetime
 from datetime import timezone as tz
@@ -27,7 +31,7 @@ class UserBase(SQLModel):
 class UserCreate(UserBase):
     """Properties to receive via API on user creation"""
 
-    password: str = Field(min_length=8, max_length=40)
+    password: str = Field(min_length=8, max_length=40, regex=r"^(?=.*[A-Z])(?=.*\d).+$")
 
 
 class UserRegister(SQLModel):
@@ -67,6 +71,7 @@ class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    devices: list["Device"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -94,8 +99,6 @@ class ItemBase(SQLModel):
 # Properties to receive on item creation
 class ItemCreate(ItemBase):
     """Properties to receive on item creation"""
-
-    pass
 
 
 # Properties to receive on item update
@@ -161,6 +164,70 @@ class NewPassword(SQLModel):
     new_password: str = Field(min_length=8, max_length=40)
 
 
+# Shared properties
+class DeviceBase(SQLModel):
+    """Base device properties"""
+
+    device_name: str = Field(min_length=1, max_length=255)
+    description: str | None = Field(default=None, max_length=255)
+
+
+# Properties to receive on device creation
+class DeviceCreate(DeviceBase):
+    """Properties to receive on device creation"""
+
+
+# Properties to receive on device update
+class DeviceUpdate(DeviceBase):
+    """Properties to receive on device update"""
+
+    device_name: str = Field(default=None, min_length=1, max_length=255)
+
+
+# Database model, database table inferred from class name
+class Device(DeviceBase, table=True):
+    """Database model for devices"""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    provider_device_id: str | None = Field(
+        None, description="Unique identifier of the external device"
+    )
+    device_name: str = Field(max_length=255)
+    last_reported_latitude: float | None = None
+    last_reported_longitude: float | None = None
+    is_online: bool = True
+    last_online_timestamp: datetime | None
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User | None = Relationship(back_populates="devices")
+    telemetry_data: list["TelemetryData"] = Relationship(
+        back_populates="device", cascade_delete=True
+    )
+
+
+# Properties to return via API, id is always required
+class DevicePublic(DeviceBase):
+    """Properties to return via API"""
+
+    id: uuid.UUID
+    owner_id: uuid.UUID
+    provider_device_id: str | None = Field(
+        None, description="Unique identifier of the external device"
+    )
+    last_reported_latitude: float | None = None
+    last_reported_longitude: float | None = None
+    is_online: bool = True
+    last_online_timestamp: datetime | None = None
+
+
+class DevicesPublic(SQLModel):
+    """Properties to return via API"""
+
+    data: list[DevicePublic]
+    count: int
+
+
 class TelemetryData(SQLModel, table=True):
     """Database model for telemetry data"""
 
@@ -178,7 +245,9 @@ class TelemetryData(SQLModel, table=True):
     channel_id: int | None = None
     protocol_id: int | None = None
     engine_ignition_status: bool | None = None
-    device_id: str | None = Field(None, description="Unique identifier of the device")
+    provider_device_id: str | None = Field(
+        None, description="Unique identifier of the external device"
+    )
     device_name: str | None = Field(None, description="Name assigned to the device")
     din: int | None = Field(None, description="Digital input status")
     event_enum: int | None = Field(None, description="Event code in enumerated form")
@@ -220,5 +289,7 @@ class TelemetryData(SQLModel, table=True):
     accumulator_14: float | None = None
     accumulator_15: float | None = None
     raw_data: dict[str, Any] | None = Field(sa_column=Column(JSON))
+    device_id: uuid.UUID = Field(foreign_key="device.id", nullable=False)
+    device: Device | None = Relationship(back_populates="telemetry_data")
 
     __table_args__ = (PrimaryKeyConstraint("id", "timestamp"),)
