@@ -1,6 +1,7 @@
 """
 Data models for the application
 """
+
 import uuid
 from datetime import datetime
 from datetime import timezone as tz
