@@ -212,6 +212,10 @@ class DevicePublic(DeviceBase):
 
     id: uuid.UUID
     owner_id: uuid.UUID
+    last_reported_latitude: float | None = None
+    last_reported_longitude: float | None = None
+    is_online: bool = True
+    last_online_timestamp: datetime | None = None
 
 
 class DevicesPublic(SQLModel):
