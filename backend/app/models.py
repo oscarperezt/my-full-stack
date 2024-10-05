@@ -212,6 +212,9 @@ class DevicePublic(DeviceBase):
 
     id: uuid.UUID
     owner_id: uuid.UUID
+    provider_device_id: str | None = Field(
+        None, description="Unique identifier of the external device"
+    )
     last_reported_latitude: float | None = None
     last_reported_longitude: float | None = None
     is_online: bool = True
