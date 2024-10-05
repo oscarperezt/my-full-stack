@@ -200,7 +200,9 @@ class Device(DeviceBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
     owner: User | None = Relationship(back_populates="devices")
-    telemetry_data: list["TelemetryData"] = Relationship(back_populates="device")
+    telemetry_data: list["TelemetryData"] = Relationship(
+        back_populates="device", cascade_delete=True
+    )
 
 
 # Properties to return via API, id is always required
@@ -280,8 +282,6 @@ class TelemetryData(SQLModel, table=True):
     accumulator_15: float | None = None
     raw_data: dict[str, Any] | None = Field(sa_column=Column(JSON))
     device_id: uuid.UUID = Field(foreign_key="device.id", nullable=False)
-    device: Device | None = Relationship(
-        back_populates="telemetry_data", cascade_delete=True
-    )
+    device: Device | None = Relationship(back_populates="telemetry_data")
 
     __table_args__ = (PrimaryKeyConstraint("id", "timestamp"),)
