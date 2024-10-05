@@ -72,10 +72,14 @@ async def receive_report(request: Request) -> dict[str, str]:
                     device = Device(
                         provider_device_id=provider_device_id,
                         device_name=report.get("device.name", ""),
-                        last_online_timestamp=report.get("timestamp"),
+                        last_online_timestamp=convert_timestamp(
+                            report.get("timestamp")
+                        ),
                         owner_id=user.id,
                     )
                     session.add(device)
+                    session.commit()
+                    session.refresh(device)
 
                 telemetry_data = TelemetryData(
                     storage_server_timestamp_utc=datetime.now(tz.utc),
