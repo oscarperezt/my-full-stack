@@ -1,6 +1,7 @@
 """
 Devices routes.
 """
+
 import uuid
 from typing import Any
 
