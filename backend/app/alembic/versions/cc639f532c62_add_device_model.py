@@ -50,11 +50,16 @@ def upgrade():
     sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
+
     op.add_column('telemetrydata', sa.Column('provider_device_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True))
+
+    # Update device_id column to UUID using explicit cast
     op.alter_column('telemetrydata', 'device_id',
                existing_type=sa.VARCHAR(),
                type_=sa.Uuid(),
+               postgresql_using='device_id::uuid',
                nullable=False)
+
     op.drop_index('ix_telemetrydata_device_id', table_name='telemetrydata')
     op.drop_index('ix_telemetrydata_ident', table_name='telemetrydata')
     op.drop_index('telemetrydata_timestamp_idx', table_name='telemetrydata')
