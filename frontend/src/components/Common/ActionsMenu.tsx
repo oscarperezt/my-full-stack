@@ -9,14 +9,16 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { FiEdit, FiTrash } from "react-icons/fi"
 
-import type { ItemPublic, UserPublic } from "../../client"
+import type { DevicePublic, ItemPublic, UserPublic } from "../../client"
 import EditUser from "../Admin/EditUser"
 import EditItem from "../Items/EditItem"
+import EditDevice from "../Devices/EditDevice"
 import Delete from "./DeleteAlert"
+
 
 interface ActionsMenuProps {
   type: string
-  value: ItemPublic | UserPublic
+  value: ItemPublic | UserPublic | DevicePublic
   disabled?: boolean
 }
 
@@ -54,13 +56,19 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
             isOpen={editUserModal.isOpen}
             onClose={editUserModal.onClose}
           />
-        ) : (
+        ) : type === "Item" ? (
           <EditItem
             item={value as ItemPublic}
             isOpen={editUserModal.isOpen}
             onClose={editUserModal.onClose}
           />
-        )}
+        ) : type === "Device" ? (
+          <EditDevice
+            device={value as DevicePublic}
+            isOpen={editUserModal.isOpen}
+            onClose={editUserModal.onClose}
+            />
+        ) : null }
         <Delete
           type={type}
           id={value.id}

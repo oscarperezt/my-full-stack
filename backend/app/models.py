@@ -176,6 +176,14 @@ class DeviceBase(SQLModel):
 class DeviceCreate(DeviceBase):
     """Properties to receive on device creation"""
 
+    last_reported_latitude: float | None = None
+    last_reported_longitude: float | None = None
+    is_online: bool = True
+    provider_device_id: str | None = Field(
+        None, description="Unique identifier of the external device"
+    )
+    last_online_timestamp: datetime | None
+
 
 # Properties to receive on device update
 class DeviceUpdate(DeviceBase):
