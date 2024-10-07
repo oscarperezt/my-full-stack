@@ -73,9 +73,14 @@ function DevicesTable() {
           <Thead>
             <Tr>
               <Th>ID</Th>
-              <Th>Title</Th>
-              <Th>Description</Th>
+              <Th>Name</Th>
               <Th>Actions</Th>
+              <Th>Latitude</Th>
+              <Th>Longitude</Th>
+              <Th>Last report</Th>
+              <Th>Description</Th>
+              <Th>Owner ID</Th>
+              <Th>Device ID (Provider)</Th>
             </Tr>
           </Thead>
           {isPending ? (
@@ -92,10 +97,16 @@ function DevicesTable() {
             <Tbody>
               {devices?.data.map((device) => (
                 <Tr key={device.id} opacity={isPlaceholderData ? 0.5 : 1}>
-                  <Td>{device.id}</Td>
-                  <Td isTruncated maxWidth="150px">
+                  <Td isTruncated maxWidth="100px">{device.id}</Td>
+                  <Td isTruncated maxWidth="200px">
                     {device.device_name}
                   </Td>
+                  <Td>
+                    <ActionsMenu type={"Device"} value={device} />
+                  </Td>
+                  <Td>{device.last_reported_latitude}</Td>
+                  <Td>{device.last_reported_longitude}</Td>
+                  <Td>{device.last_online_timestamp}</Td>
                   <Td
                     color={!device.description ? "ui.dim" : "inherit"}
                     isTruncated
@@ -103,9 +114,8 @@ function DevicesTable() {
                   >
                     {device.description || "N/A"}
                   </Td>
-                  <Td>
-                    <ActionsMenu type={"Device"} value={device} />
-                  </Td>
+                  <Td isTruncated maxWidth="100px">{device.owner_id}</Td>
+                  <Td isTruncated maxWidth="200px">{device.provider_device_id}</Td>
                 </Tr>
               ))}
             </Tbody>
