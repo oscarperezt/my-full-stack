@@ -15,6 +15,14 @@ export type Body_login_login_access_token = {
 export type DeviceCreate = {
 	device_name: string;
 	description?: string | null;
+	last_reported_latitude?: number | null;
+	last_reported_longitude?: number | null;
+	is_online?: boolean;
+	/**
+	 * Unique identifier of the external device
+	 */
+	provider_device_id?: string | null;
+	last_online_timestamp: string | null;
 };
 
 

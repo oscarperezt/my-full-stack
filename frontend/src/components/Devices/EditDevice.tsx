@@ -82,7 +82,7 @@ const EditDevice = ({ device, isOpen, onClose }: EditDeviceProps) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isInvalid={!!errors.device_name}>
-              <FormLabel htmlFor="title">Title</FormLabel>
+              <FormLabel htmlFor="title">Name</FormLabel>
               <Input
                 id="title"
                 {...register("device_name", {

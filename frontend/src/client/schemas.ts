@@ -58,6 +58,45 @@ export const $DeviceCreate = {
 	type: 'null',
 }],
 },
+		last_reported_latitude: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		last_reported_longitude: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		is_online: {
+	type: 'boolean',
+	default: true,
+},
+		provider_device_id: {
+	type: 'any-of',
+	description: `Unique identifier of the external device`,
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		last_online_timestamp: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date-time',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
 	},
 } as const;
 

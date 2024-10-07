@@ -3,6 +3,7 @@ Devices routes.
 """
 
 import uuid
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
@@ -74,6 +75,9 @@ def create_device(
     Create new device.
     """
     device = Device.model_validate(device_in, update={"owner_id": current_user.id})
+    # Set last_online_timestamp to current time if not provided
+    if device.last_online_timestamp is None:
+        device.last_online_timestamp = datetime.now(timezone.utc)
     session.add(device)
     session.commit()
     session.refresh(device)

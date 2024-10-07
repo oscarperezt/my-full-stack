@@ -38,6 +38,11 @@ const AddDevice = ({ isOpen, onClose }: AddDeviceProps) => {
     defaultValues: {
       device_name: "",
       description: "",
+      provider_device_id: "",
+      is_online: false,
+      last_online_timestamp: null,
+      last_reported_latitude: null, // Hidden field, set to null
+      last_reported_longitude: null, // Hidden field, set to null
     },
   })
 
@@ -94,6 +99,15 @@ const AddDevice = ({ isOpen, onClose }: AddDeviceProps) => {
                 id="description"
                 {...register("description")}
                 placeholder="Description"
+                type="text"
+              />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel htmlFor="provider_device_id">Provider Device ID</FormLabel>
+              <Input
+                id="provider_device_id"
+                {...register("provider_device_id")}
+                placeholder="Provider Device ID"
                 type="text"
               />
             </FormControl>
