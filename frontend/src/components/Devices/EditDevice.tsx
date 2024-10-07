@@ -81,17 +81,17 @@ const EditDevice = ({ device, isOpen, onClose }: EditDeviceProps) => {
           <ModalHeader>Edit Device</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={!!errors.title}>
+            <FormControl isInvalid={!!errors.device_name}>
               <FormLabel htmlFor="title">Title</FormLabel>
               <Input
                 id="title"
-                {...register("title", {
-                  required: "Title is required",
+                {...register("device_name", {
+                  required: "Name is required",
                 })}
                 type="text"
               />
-              {errors.title && (
-                <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+              {errors.device_name && (
+                <FormErrorMessage>{errors.device_name.message}</FormErrorMessage>
               )}
             </FormControl>
             <FormControl mt={4}>

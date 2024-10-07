@@ -36,7 +36,7 @@ const AddDevice = ({ isOpen, onClose }: AddDeviceProps) => {
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
-      title: "",
+      device_name: "",
       description: "",
     },
   })
@@ -74,18 +74,18 @@ const AddDevice = ({ isOpen, onClose }: AddDeviceProps) => {
           <ModalHeader>Add Device</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isRequired isInvalid={!!errors.title}>
-              <FormLabel htmlFor="title">Title</FormLabel>
+            <FormControl isRequired isInvalid={!!errors.device_name}>
+              <FormLabel htmlFor="title">Name</FormLabel>
               <Input
                 id="title"
-                {...register("title", {
-                  required: "Title is required.",
+                {...register("device_name", {
+                  required: "Device name is required.",
                 })}
-                placeholder="Title"
+                placeholder="Name"
                 type="text"
               />
-              {errors.title && (
-                <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+              {errors.device_name && (
+                <FormErrorMessage>{errors.device_name.message}</FormErrorMessage>
               )}
             </FormControl>
             <FormControl mt={4}>

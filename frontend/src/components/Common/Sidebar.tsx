@@ -19,6 +19,7 @@ import Logo from "/assets/images/coltrack-logo.svg"
 import type { UserPublic } from "../../client"
 import useAuth from "../../hooks/useAuth"
 import SidebarItems from "./SidebarItems"
+import SidebarDevices from "./SidebarDevices"
 
 const Sidebar = () => {
   const queryClient = useQueryClient()
