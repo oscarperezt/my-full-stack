@@ -34,6 +34,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Create .env file from GitHub Secrets
         run: |
           echo "DOMAIN=localhost" > .env
@@ -57,6 +58,11 @@ jobs:
           echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
           echo "DOCKER_IMAGE_BACKEND=${{ secrets.DOCKER_IMAGE_BACKEND }}" >> .env
           echo "DOCKER_IMAGE_FRONTEND=${{ secrets.DOCKER_IMAGE_FRONTEND }}" >> .env
-      - name: Deploy Services
+
+      - name: Stop Containers without Removing Volumes
+        run: |
+          docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} down --volumes=false
+
+      - name: Build and Deploy Services
         run: |
           docker compose -f docker-compose.yml --project-name ${{ secrets.STACK_NAME_STAGING }} up -d --build
