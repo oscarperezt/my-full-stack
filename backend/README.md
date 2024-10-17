@@ -1,4 +1,4 @@
-# FastAPI Project - Backend
+# Coltrack LBS - Backend
 
 ## Requirements
 
